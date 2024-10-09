@@ -1,2 +1,11 @@
 # Annoying directory created by the Nix package manager
 result/
+
+# Pyenv version specifier
+.python_version
+
+# Virtual Environment
+.venv/
+
+# Python Cache
+__pycache__/
