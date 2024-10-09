@@ -1,26 +1,31 @@
-from src.game_of_life import ConwaysGameOfLife
+from src.game_of_life import ConwaysGameOfLife, Cell
 
 
 def test_initialization():
-    game = ConwaysGameOfLife()
+    game = ConwaysGameOfLife([[]])
     assert game
 
 
 def test_empty_board_of_one_by_one():
-    game = ConwaysGameOfLife([0])
+    board = [[Cell.DEAD]]
+    game = ConwaysGameOfLife(board)
     result = game.get_next_generation()
-    assert result == [0]
+    assert result == [[Cell.DEAD]], "expects all cells to be dead"
 
 
 def test_one_alive_cell_with_less_than_two_neigbors():
-    game = ConwaysGameOfLife([0, 1])
+    board = [[Cell.DEAD, Cell.ALIVE]]
+    game = ConwaysGameOfLife(board)
     result = game.get_next_generation()
-    assert result == [0, 0]
+    assert result == [[Cell.DEAD, Cell.DEAD]], "expects all cells to be dead"
 
 
 def test_live_cell_with_two_live_neighbors():
-    game = ConwaysGameOfLife([1, 1, 1])
+    state = [[Cell.ALIVE, Cell.ALIVE, Cell.ALIVE]]
+    game = ConwaysGameOfLife(state)
     result = game.get_next_generation()
 
     # Center cell should be alive
-    assert result[1] == 1
+    assert result[0][0] == Cell.DEAD, "expects cell 0, 0 to be dead"
+    assert result[0][1] == Cell.ALIVE, "expects cell 0, 1 to be alive"
+    assert result[0][2] == Cell.DEAD, "expects cell 0, 2 to be dead"
