@@ -1,6 +1,9 @@
 class ConwaysGameOfLife:
-    def __init__(self):
-        pass
+    """An instance of Conway's Game of Life"""
+    def __init__(self, state=None):
+        """Initializer"""
+        self._state = state
 
-    def start(self):
-        pass
+    def get_next_generation(self):
+        """Perform 1 cycle of the game"""
+        return [0 for cell in self._state]
