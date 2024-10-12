@@ -51,20 +51,16 @@ class ConwaysGameOfLife:
     def neighbors(self) -> list[list[int]]:
         return self._neighbors
 
-    # def _will_cell_be_alive(self, row: int, col: int) -> bool:
-    #     neighbor_count = self._neighbors[row][col]
-    #     if neighbor_count == 2 and self._state[row][col] == 1:
-    #         return True
-    #     if neighbor_count == 3:
-    #         return True
+    def _will_cell_be_alive(self, index: tuple[int, int]) -> bool:
+        row, col = index
+        neighbor_count = self._neighbors[row][col]
+        if neighbor_count == 2 and self._state[row][col] == 1:
+            return True
+        if neighbor_count == 3:
+            return True
+        return False
 
     def get_next_generation(self):
-        alive_cells = []
-        for row, col in product(range(self._size), repeat=2):
-            neighbor_count = self._neighbors[row][col]
-            if (
-                neighbor_count == 3 or
-                (neighbor_count == 2 and self._state[row][col] == 1)
-            ):
-                alive_cells.append((row, col))
+        cell_indicies = product(range(self._size), repeat=2)
+        alive_cells = filter(self._will_cell_be_alive, cell_indicies)
         return ConwaysGameOfLife(size=self._size, alive=alive_cells)
