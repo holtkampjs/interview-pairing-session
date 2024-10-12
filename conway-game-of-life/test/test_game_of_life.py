@@ -1,6 +1,11 @@
 from src.game_of_life import ConwaysGameOfLife
 from itertools import product
 
+# TODO: Add GUI. Possibly Textual
+# TODO: Optional
+# - Implement non-square board e.g. 3x4
+# - Implement optional board wrapping
+
 
 def test_initialization():
     game = ConwaysGameOfLife()
