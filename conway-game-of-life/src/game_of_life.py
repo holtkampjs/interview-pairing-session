@@ -8,7 +8,6 @@ ALIVE: bool = True
 
 
 class ConwaysGameOfLife:
-
     def __init__(self, *, size: int = 0, alive: list[Point] = []):
         # world is a square
         self._size: int = size
