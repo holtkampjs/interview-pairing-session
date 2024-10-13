@@ -1,4 +1,4 @@
-from src.game_of_life import ConwaysGameOfLife
+from src.game_of_life import ConwaysGameOfLife, ALIVE, DEAD
 from itertools import product
 
 # TODO: Add GUI. Possibly Textual
@@ -16,36 +16,18 @@ def test_empty_create_world_three_by_three():
     game = ConwaysGameOfLife(size=3)
     assert game.size == 3
     assert game.state == [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
+        [DEAD, DEAD, DEAD],
+        [DEAD, DEAD, DEAD],
+        [DEAD, DEAD, DEAD]
     ]
 
 
 def test_populate_world_three_by_three():
     game = ConwaysGameOfLife(size=3, alive=[(0, 0)])
     assert game.state == [
-        [1, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
-    ]
-
-
-def test_get_neighbors_three_by_three_population_of_one():
-    game = ConwaysGameOfLife(size=3, alive=[(0, 0)])
-    assert game.neighbors == [
-        [0, 1, 0],
-        [1, 1, 0],
-        [0, 0, 0]
-    ]
-
-
-def test_get_neighbors_three_by_three_population_of_three():
-    game = ConwaysGameOfLife(size=3, alive=[(0, 0), (1, 1), (1, 2)])
-    assert game.neighbors == [
-        [1, 3, 2],
-        [2, 2, 1],
-        [1, 2, 2]
+        [ALIVE, DEAD, DEAD],
+        [DEAD, DEAD, DEAD],
+        [DEAD, DEAD, DEAD]
     ]
 
 
@@ -53,16 +35,16 @@ def test_underpopulation_one_lone_cell():
     game = ConwaysGameOfLife(size=3, alive=[(0, 0)])
     next_generation = game.get_next_generation()
     assert next_generation.state == [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
+        [DEAD, DEAD, DEAD],
+        [DEAD, DEAD, DEAD],
+        [DEAD, DEAD, DEAD]
     ], "All cells should be dead"
 
 
 def test_underpopulation_one_lone_cell_tiny_board():
     game = ConwaysGameOfLife(size=1, alive=[(0, 0)])
     next_generation = game.get_next_generation()
-    assert next_generation.state == [[0]], "All cells should be dead"
+    assert next_generation.state == [[DEAD]], "All cells should be dead"
 
 
 def test_cell_living_on_with_two_neighbors():
@@ -72,9 +54,9 @@ def test_cell_living_on_with_two_neighbors():
     )
     next_generation = game.get_next_generation()
     assert next_generation.state == [
-        [0, 1, 0],
-        [0, 0, 0],
-        [0, 1, 0]
+        [DEAD, ALIVE, DEAD],
+        [DEAD, DEAD, DEAD],
+        [DEAD, ALIVE, DEAD]
     ], "The cells at (0, 1) and (2, 1) should be alive"
 
 
@@ -82,9 +64,9 @@ def test_cell_living_on_with_three_neighbors():
     game = ConwaysGameOfLife(size=3, alive=[(0, 0), (0, 1), (1, 0), (1, 1)])
     next_generation = game.get_next_generation()
     assert next_generation.state == [
-        [1, 1, 0],
-        [1, 1, 0],
-        [0, 0, 0]
+        [ALIVE, ALIVE, DEAD],
+        [ALIVE, ALIVE, DEAD],
+        [DEAD, DEAD, DEAD]
     ]
 
 
@@ -100,9 +82,9 @@ def test_overpopulation_cell_with_more_than_three_neighbors():
     )
     next_generation = game.get_next_generation()
     assert next_generation.state == [
-        [1, 1, 1],
-        [0, 0, 0],
-        [1, 1, 1]
+        [ALIVE, ALIVE, ALIVE],
+        [DEAD, DEAD, DEAD],
+        [ALIVE, ALIVE, ALIVE]
     ]
 
 
@@ -113,9 +95,9 @@ def test_overpopulation_fully_populated():
     )
     next_generation = game.get_next_generation()
     assert next_generation.state == [
-        [1, 0, 1],
-        [0, 0, 0],
-        [1, 0, 1]
+        [ALIVE, DEAD, ALIVE],
+        [DEAD, DEAD, DEAD],
+        [ALIVE, DEAD, ALIVE]
     ]
 
 
@@ -126,7 +108,7 @@ def test_reproduction_with_one_cell_in_three_corners_of_three_by_three():
     )
     next_generation = game.get_next_generation()
     assert next_generation.state == [
-        [0, 0, 0],
-        [0, 1, 0],
-        [0, 0, 0]
+        [DEAD, DEAD, DEAD],
+        [DEAD, ALIVE, DEAD],
+        [DEAD, DEAD, DEAD]
     ], "Center cell should be produced, others should perish"

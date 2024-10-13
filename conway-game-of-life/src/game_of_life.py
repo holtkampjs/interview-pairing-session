@@ -2,27 +2,30 @@ from itertools import product
 from typing import TypeAlias
 
 Point: TypeAlias = tuple[int, int]
-Grid: TypeAlias = list[list[int]]
+Grid: TypeAlias = list[list[bool]]
+DEAD: bool = False
+ALIVE: bool = True
 
 
 class ConwaysGameOfLife:
+
     def __init__(self, *, size: int = 0, alive: list[Point] = []):
         # world is a square
         self._size: int = size
 
-        # initialize all cells to zero (dead)
+        # initialize all cells to false (dead)
         self._state: Grid = [
-            [0] * self._size for _ in range(self._size)
+            [DEAD] * self._size for _ in range(self._size)
         ]
 
         # initialize neighbor count to zero
-        self._neighbors: Grid = [
+        self._neighbors: list[list[int]] = [
             [0] * self._size for _ in range(self._size)
         ]
 
         for row, col in alive:
             # populate alive cell
-            self._state[row][col] = 1
+            self._state[row][col] = ALIVE
 
             # increment neighbor counts
             for r, c in product(range(row-1, row+2), range(col-1, col+2)):
@@ -41,14 +44,10 @@ class ConwaysGameOfLife:
     def state(self) -> Grid:
         return self._state
 
-    @property
-    def neighbors(self) -> Grid:
-        return self._neighbors
-
     def _will_cell_be_alive(self, index: Point) -> bool:
         row, col = index
         neighbor_count = self._neighbors[row][col]
-        if neighbor_count == 2 and self._state[row][col] == 1:
+        if neighbor_count == 2 and self._state[row][col] is ALIVE:
             return True
         if neighbor_count == 3:
             return True
