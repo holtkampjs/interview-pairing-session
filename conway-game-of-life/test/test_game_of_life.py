@@ -112,3 +112,13 @@ def test_reproduction_with_one_cell_in_three_corners_of_three_by_three():
         [DEAD, ALIVE, DEAD],
         [DEAD, DEAD, DEAD]
     ], "Center cell should be produced, others should perish"
+
+
+def test_populate_cell_out_of_bounds_should_be_ignored():
+    game = ConwaysGameOfLife(
+        size=1,
+        alive=[(0, 0), (0, 2)]
+    )
+    assert game.state == [
+        [ALIVE],
+    ], "Erronious cell to populate should be ignored"

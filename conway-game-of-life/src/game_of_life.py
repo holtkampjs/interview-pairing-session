@@ -1,36 +1,50 @@
 from itertools import product
-from typing import TypeAlias
+from typing import TypeAlias, TypeVar
 
 Point: TypeAlias = tuple[int, int]
 Grid: TypeAlias = list[list[bool]]
+T = TypeVar('T')
 DEAD: bool = False
 ALIVE: bool = True
 
 
 class ConwaysGameOfLife:
-    def __init__(self, *, size: int = 0, alive: list[Point] = []):
+    _size: int
+    _state: Grid
+    _neighbors: list[list[int]]
+
+    def __init__(self, *, size: int = 0, alive: set[Point] = set()):
         # world is a square
-        self._size: int = size
+        self._size = size
+
+        def populate_grid(value: T) -> list[list[T]]:
+            return [[value] * self._size for _ in range(self._size)]
 
         # initialize all cells to false (dead)
-        self._state: Grid = [
-            [DEAD] * self._size for _ in range(self._size)
-        ]
+        self._state = populate_grid(DEAD)
 
         # initialize neighbor count to zero
-        self._neighbors: list[list[int]] = [
-            [0] * self._size for _ in range(self._size)
-        ]
+        self._neighbors = populate_grid(0)
+
+        def is_out_of_bounds(row: int, col: int, size: int) -> bool:
+            return row < 0 or col < 0 or row >= size or col >= size
 
         for row, col in alive:
+            # skip if out of bounds
+            if is_out_of_bounds(row, col, self._size):
+                continue
+
             # populate alive cell
             self._state[row][col] = ALIVE
 
             # increment neighbor counts
-            for r, c in product(range(row-1, row+2), range(col-1, col+2)):
+            neighbor_cells = product(range(row-1, row+2), range(col-1, col+2))
+            for r, c in neighbor_cells:
                 # skip if out of bounds
-                if r < 0 or c < 0 or r >= self._size or c >= self._size:
+                if is_out_of_bounds(r, c, self._size):
                     continue
+
+                # skip if equal to cell being populated
                 if r == row and c == col:
                     continue
                 self._neighbors[r][c] += 1
